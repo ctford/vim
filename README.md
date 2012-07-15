@@ -34,16 +34,28 @@ If syntax highlighting doesn't work, make sure `.vim` is in your home directory 
 
 ## Starting the Nailgun Server
 
-Now we want to get to the serious stuff. We'll need to start a nailgun server to get the most use out of VimClojure. There are (at least) two options. If you're using `leiningen`, install the [lein-nailgun plugin] (https://github.com/ibdknox/lein-nailgun) (this is Chris Granger's fork, updated for 2.3.0), create a project, and run the plugin:
+Now we want to get to the serious stuff. We'll need to start a nailgun server to get the most use out of VimClojure. There are (at least) two options.
 
-    $ lein plugin install org.clojars.ibdknox/lein-nailgun "1.1.1"
+The best option is Daniel Solano Gómez's [lein-tarsier plugin] (https://github.com/sattvik/lein-tarsier). First you'll need to install the plugin:
+
+For Leiningen 1.x:
+
+    $ lein plugin install lein-tarsier 0.9.1
+
+For Leiningen 2.x add this to the plugins vector of your `:user` profile located in `~/.lein/profiles.clj`:
+
+    {:user {:plugins [[lein-tarsier "0.9.1"]]}}
+
+Now you can create a new project and run the plugin:
+
     $ lein new nailgun-test
     $ cd nailgun-test
-    $ lein nailgun
-    Copying 1 file to /.../nailgun-test/lib
-    NGServer started on 127.0.0.1, port 2113.
+    $ lein vimclojure
+    Copying 2 files to /Users/dave/Documents/tmp/nailgun-test/lib
+    Starting VimClojure server on 127.0.0.1, port 2113
+    Happy hacking!
 
-or, run the server manually with the jar in this install:
+Alternatively, if you hate yourself, run the server manually with the jar in this install:
 
     $ cd .vim/lib
     $ java -cp server-2.3.0.jar:/path/to/clojure-x.y.z.jar vimclojure.nailgun.NGServer
@@ -80,9 +92,14 @@ Put your cursor on the `(set` on line 2 and hit `\lw`. VimClojure with show the 
 
 # What's Next?
 
-* Go read [vimclojure.txt](https://github.com/daveray/vimclojure-easy/blob/master/bundle/vimclojure-2.3.1/doc/clojure.txt)!!!
+* Go read the vimclojure documentation! (You may find it here: `bundle/vimclojure-x.x.x/doc/clojure.txt`).
 * If you've already got vim configuration, you should be able to basically copy this directory structure over yours. Then move the Pathogen and VimClojure settings from `vimrc.vim` to your `vimrc` file.
 * A more elaborate setup is described [here](http://blog.darevay.com/2010/10/how-i-tamed-vimclojure/)
+
+# ClojureScript
+VimClojure doesn't have any particular support for ClojureScript, but you can at least enable syntax highlighting and stuff in `.cljs` files by adding this to your `vimrc` file:
+
+    autocmd BufRead,BufNewFile *.cljs setlocal filetype=clojure
 
 # Resources
 
