@@ -16,3 +16,6 @@ let vimclojure#NailgunClient = $HOME . "/.vim/lib/vimclojure-nailgun-client/ng"
 " Avoid the leader pinky-stretch.
 let mapleader = ","
 let maplocalleader = ","
+
+" Paredit
+let g:paredit_mode = 0
