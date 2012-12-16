@@ -22,3 +22,8 @@ let g:paredit_mode = 1
 
 " Light colourscheme
 " colors mayansmoke
+
+" Use cursorline to indicate when we're in insert mode.
+autocmd InsertEnter * set cursorline
+autocmd InsertLeave * set nocursorline
+
