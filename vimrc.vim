@@ -27,3 +27,10 @@ let g:paredit_mode = 1
 autocmd InsertEnter * set cursorline
 autocmd InsertLeave * set nocursorline
 
+" No tabs!
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+" Two spaces for indent in Clojure.
+autocmd Filetype clojure setlocal ts=2 sw=2
