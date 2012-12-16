@@ -19,3 +19,6 @@ let maplocalleader = ","
 
 " Paredit
 let g:paredit_mode = 1
+
+" Light colourscheme
+" colors mayansmoke
