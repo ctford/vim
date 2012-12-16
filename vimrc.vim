@@ -34,3 +34,5 @@ set expandtab
 
 " Two spaces for indent in Clojure.
 autocmd Filetype clojure setlocal ts=2 sw=2
+
+map :nt<CR> :NERDTreeToggle<CR>
