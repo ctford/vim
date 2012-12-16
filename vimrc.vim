@@ -18,4 +18,4 @@ let mapleader = ","
 let maplocalleader = ","
 
 " Paredit
-let g:paredit_mode = 0
+let g:paredit_mode = 1
