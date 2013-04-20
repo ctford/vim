@@ -16,6 +16,8 @@ autocmd Filetype clojure RainbowParenthesesToggle
 
 " Light colourscheme
 " colors mayansmoke
+map :light<CR> :colors mayansmoke<CR>
+map :dark<CR> :colors default<CR>
 
 " Use cursorline to indicate when we're in insert mode.
 autocmd InsertEnter * set cursorline
