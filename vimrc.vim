@@ -12,6 +12,12 @@ let maplocalleader = ","
 set ignorecase
 set smartcase
 
+" Make moving between windows a bit more convenient.
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
 " Paredit
 let g:paredit_mode = 1
 
