@@ -11,6 +11,9 @@ let maplocalleader = ","
 " Paredit
 let g:paredit_mode = 1
 
+" Rainbow parens
+autocmd Filetype clojure RainbowParenthesesToggle
+
 " Light colourscheme
 " colors mayansmoke
 
