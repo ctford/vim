@@ -18,6 +18,13 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+" Return to the last edit position when opening files.
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
+set viminfo^=%
+
 " Paredit
 let g:paredit_mode = 1
 
