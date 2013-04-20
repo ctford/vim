@@ -8,6 +8,10 @@ filetype plugin indent on
 let mapleader = ","
 let maplocalleader = ","
 
+" Reform search.
+set ignorecase
+set smartcase
+
 " Paredit
 let g:paredit_mode = 1
 
