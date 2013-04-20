@@ -19,6 +19,10 @@ autocmd Filetype clojure RainbowParenthesesToggle
 map :light<CR> :colors mayansmoke<CR>
 map :dark<CR> :colors default<CR>
 
+" Omnicompletion
+imap <C-Space> <C-x><C-o>
+imap <C-@> <C-Space>
+
 " Use cursorline to indicate when we're in insert mode.
 autocmd InsertEnter * set cursorline
 autocmd InsertLeave * set nocursorline
