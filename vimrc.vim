@@ -44,6 +44,10 @@ map :dark<CR> :colors default<CR>
 imap <C-Space> <C-x><C-o>
 imap <C-@> <C-Space>
 
+" VimClojure keys for Fireplace.
+map <LocalLeader>ep cpip
+map <LocalLeader>el cpVl
+
 " Visually indicate when we're in insert mode.
 autocmd InsertEnter * set cursorline
 autocmd InsertLeave * set nocursorline
