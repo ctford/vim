@@ -45,8 +45,10 @@ imap <C-Space> <C-x><C-o>
 imap <C-@> <C-Space>
 
 " VimClojure keys for Fireplace.
-map <LocalLeader>ep cpip
-map <LocalLeader>el cpVl
+map <LocalLeader>ep cpip 
+map <LocalLeader>et :Eval<CR> 
+map <LocalLeader>el :.Eval<CR> 
+map <LocalLeader>ef :1,$Eval<CR>
 
 " Visually indicate when we're in insert mode.
 autocmd InsertEnter * set cursorline
