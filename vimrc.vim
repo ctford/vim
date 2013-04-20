@@ -14,7 +14,7 @@ let g:paredit_mode = 1
 " Rainbow parens
 autocmd Filetype clojure RainbowParenthesesToggle
 
-" Light colourscheme
+" Light colour scheme
 " colors mayansmoke
 map :light<CR> :colors mayansmoke<CR>
 map :dark<CR> :colors default<CR>
@@ -23,7 +23,7 @@ map :dark<CR> :colors default<CR>
 imap <C-Space> <C-x><C-o>
 imap <C-@> <C-Space>
 
-" Use cursorline to indicate when we're in insert mode.
+" Visually indicate when we're in insert mode.
 autocmd InsertEnter * set cursorline
 autocmd InsertLeave * set nocursorline
 
@@ -35,4 +35,5 @@ set expandtab
 " Two spaces for indent in Clojure.
 autocmd Filetype clojure setlocal ts=2 sw=2
 
+" Nerd tree
 map :nt<CR> :NERDTreeToggle<CR>
