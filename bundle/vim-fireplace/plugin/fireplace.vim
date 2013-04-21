@@ -636,6 +636,7 @@ function! s:Eval(bang, line1, line2, count, args) abort
     let expr = a:args
   else
     if a:count ==# 0
+      normal! ^
       let line1 = searchpair('(','',')', 'bcrn', g:fireplace#skip)
       let line2 = searchpair('(','',')', 'rn', g:fireplace#skip)
     else
@@ -1066,13 +1067,6 @@ function! s:Apropos(pattern) abort
   endif
 endfunction
 
-function! s:Expand(fn) abort
-  silent exe 'normal! "myab'
-  let form = @m
-  let expansion = fireplace#session_eval('(clojure.core/'.a:fn.' (quote '.form.'))')
-  return 'echo "\n'.expansion.'"'
-endfunction
-
 function! s:K()
   let word = expand('<cword>')
   let java_candidate = matchstr(word, '^\%(\w\+\.\)*\u\l\w*\ze\%(\.\|\/\w\+\)\=$')
@@ -1083,10 +1077,17 @@ function! s:K()
   endif
 endfunction
 
+function! s:Expand(fn) abort
+  silent exe 'normal! "myab'
+  let form = @m
+  let expansion = fireplace#session_eval('(clojure.core/'.a:fn.' (quote '.form.'))')
+  return 'echo "\n"'.shellescape(expansion)
+endfunction
+
 nnoremap <Plug>FireplaceK :<C-R>=<SID>K()<CR><CR>
-nnoremap <Plug>FireplaceSource :Source <C-R><C-W><CR>
 nnoremap <Plug>FireplaceMacroExpand :<C-R>=<SID>Expand('macroexpand')<CR><CR>
 nnoremap <Plug>FireplaceMacroExpand1 :<C-R>=<SID>Expand('macroexpand-1')<CR><CR>
+nnoremap <Plug>FireplaceSource :Source <C-R><C-W><CR>
 
 augroup fireplace_doc
   autocmd!
