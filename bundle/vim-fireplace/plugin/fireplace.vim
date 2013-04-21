@@ -1066,17 +1066,10 @@ function! s:Apropos(pattern) abort
   endif
 endfunction
 
-function! s:MacroExpand() abort
+function! s:Expand(fn) abort
   silent exe 'normal! "myab'
   let form = @m
-  let expansion = fireplace#session_eval('(clojure.core/macroexpand (quote '.form.'))')
-  return 'echo "\n'.expansion.'"'
-endfunction
-
-function! s:MacroExpand1() abort
-  silent exe 'normal! "myab'
-  let form = @m
-  let expansion = fireplace#session_eval('(clojure.core/macroexpand-1 (quote '.form.'))')
+  let expansion = fireplace#session_eval('(clojure.core/'.a:fn.' (quote '.form.'))')
   return 'echo "\n'.expansion.'"'
 endfunction
 
@@ -1092,8 +1085,8 @@ endfunction
 
 nnoremap <Plug>FireplaceK :<C-R>=<SID>K()<CR><CR>
 nnoremap <Plug>FireplaceSource :Source <C-R><C-W><CR>
-nnoremap <Plug>FireplaceMacroExpand :<C-R>=<SID>MacroExpand()<CR><CR>
-nnoremap <Plug>FireplaceMacroExpand1 :<C-R>=<SID>MacroExpand1()<CR><CR>
+nnoremap <Plug>FireplaceMacroExpand :<C-R>=<SID>Expand('macroexpand')<CR><CR>
+nnoremap <Plug>FireplaceMacroExpand1 :<C-R>=<SID>Expand('macroexpand-1')<CR><CR>
 
 augroup fireplace_doc
   autocmd!
