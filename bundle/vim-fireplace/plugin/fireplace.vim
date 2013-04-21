@@ -636,7 +636,6 @@ function! s:Eval(bang, line1, line2, count, args) abort
     let expr = a:args
   else
     if a:count ==# 0
-      normal! ^
       let line1 = searchpair('(','',')', 'bcrn', g:fireplace#skip)
       let line2 = searchpair('(','',')', 'rn', g:fireplace#skip)
     else
@@ -1067,8 +1066,10 @@ function! s:Apropos(pattern) abort
   endif
 endfunction
 
-function! s:Macroexpand(form) abort
-  let expansion = fireplace#session_eval('(clojure.core/macroexpand (quote '.a:form.'))')
+function! s:Macroexpand() abort
+  silent exe 'normal! "myab'
+  let form = @m
+  let expansion = fireplace#session_eval('(clojure.core/macroexpand (quote '.form.'))')
   return 'echo "\n'.expansion.'"'
 endfunction
 
@@ -1084,15 +1085,15 @@ endfunction
 
 nnoremap <Plug>FireplaceK :<C-R>=<SID>K()<CR><CR>
 nnoremap <Plug>FireplaceSource :Source <C-R><C-W><CR>
+nnoremap <Plug>FireplaceMacroexpand :<C-R>=<SID>Macroexpand()<CR><CR>
 
 augroup fireplace_doc
   autocmd!
   autocmd FileType clojure nmap <buffer> K  <Plug>FireplaceK
   autocmd FileType clojure nmap <buffer> [d <Plug>FireplaceSource
   autocmd FileType clojure nmap <buffer> ]d <Plug>FireplaceSource
-  autocmd FileType clojure command! -buffer -nargs=1 Macroexpand :exe s:Macroexpand(<q-args>)
-  autocmd FileType clojure nmap <buffer> [me :Macroexpand
-  autocmd FileType clojure nmap <buffer> ]me :Macroexpand
+  autocmd FileType clojure nmap <buffer> [me <Plug>FireplaceMacroexpand
+  autocmd FileType clojure nmap <buffer> ]me <Plug>FireplaceMacroexpand
   autocmd FileType clojure command! -buffer -nargs=1 Apropos :exe s:Apropos(<q-args>)
   autocmd FileType clojure command! -buffer -nargs=1 FindDoc :exe s:Lookup('clojure.repl', 'find-doc', printf('#"%s"', <q-args>))
   autocmd FileType clojure command! -buffer -bar -nargs=1 Javadoc :exe s:Lookup('clojure.java.javadoc', 'javadoc', <q-args>)
