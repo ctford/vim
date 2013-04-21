@@ -1067,6 +1067,11 @@ function! s:Apropos(pattern) abort
   endif
 endfunction
 
+function! s:Macroexpand(form) abort
+  let expansion = fireplace#session_eval('(clojure.core/macroexpand (quote '.a:form.'))')
+  return 'echo "\n'.expansion.'"'
+endfunction
+
 function! s:K()
   let word = expand('<cword>')
   let java_candidate = matchstr(word, '^\%(\w\+\.\)*\u\l\w*\ze\%(\.\|\/\w\+\)\=$')
@@ -1086,6 +1091,7 @@ augroup fireplace_doc
   autocmd FileType clojure nmap <buffer> [d <Plug>FireplaceSource
   autocmd FileType clojure nmap <buffer> ]d <Plug>FireplaceSource
   autocmd FileType clojure command! -buffer -nargs=1 Apropos :exe s:Apropos(<q-args>)
+  autocmd FileType clojure command! -buffer -nargs=1 Macroexpand :exe s:Macroexpand(<q-args>)
   autocmd FileType clojure command! -buffer -nargs=1 FindDoc :exe s:Lookup('clojure.repl', 'find-doc', printf('#"%s"', <q-args>))
   autocmd FileType clojure command! -buffer -bar -nargs=1 Javadoc :exe s:Lookup('clojure.java.javadoc', 'javadoc', <q-args>)
   autocmd FileType clojure command! -buffer -bar -nargs=1 -complete=customlist,fireplace#eval_complete Doc     :exe s:Lookup('clojure.repl', 'doc', <q-args>)
