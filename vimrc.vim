@@ -50,6 +50,7 @@ map <LocalLeader>et cpab :Last<CR>
 map <LocalLeader>el :.Eval<CR>:Last<CR> 
 map <LocalLeader>ef :%Eval<CR>:Last<CR>
 map <LocalLeader>me [me :Last<CR>
+map <LocalLeader>p <C-W>z
 
 " Visually indicate when we're in insert mode.
 autocmd InsertEnter * set cursorline
