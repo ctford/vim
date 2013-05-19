@@ -68,7 +68,8 @@ Standard stuff here.  `:Eval` evaluates a range (`:%Eval` gets the whole
 file), `:Require` requires a namespace with `:reload` (`:Require!` does
 `:reload-all`), either the current buffer or a given argument.  There's a `cp`
 operator that evaluates a given motion (`cpp` for the expression under the
-cursor).
+cursor). `cm` and `c1m` are similar, but they only run `macroexpand` and
+`macroexpand-1` instead of evaluating the form entirely.
 
 Any failed evaluation loads the stack trace into the location list, which
 can be easily accessed with `:lopen`.
@@ -83,9 +84,6 @@ I'm new to Clojure, so stuff that helps me understand code is a top priority.
 * `K` is mapped to look up the symbol under the cursor with `doc`.
 
 * `[d` is mapped to look up the symbol under the cursor with `source`.
-
-* `[me` is mapped to macroexpand the form under the cursor. `]me` does the same
-  thing, but with macroexpand-1.
 
 * `[<C-D>` jumps to the definition of a symbol (even if it's inside a jar
   file).

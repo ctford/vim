@@ -60,12 +60,6 @@ K                       Look up docs for keyword under cursor.
 [d                      Show source for keyword under cursor.
 ]d
 
-                                                *fireplace-[me*
-[me                     macroexpand the form under the cursor.
-
-                                                *fireplace-]me*
-]me                     macroexpand-1 the form under the cursor.
-
 NAVIGATING                                      *fireplace-navigating*
 
 These commands will never use a remote REPL, only a local one, as file paths
@@ -144,6 +138,18 @@ cpr                     Eval a require :reload form.
 c!{motion}              Eval/replace the code indicated by {motion}.
 
 c!!                     Eval/replace the inner-most expr at the cusror.
+
+                                                *fireplace-cm*
+cm{motion}              Fully macroexpand the code indicated by {motion}.
+
+                                                *fireplace-cmp*
+cmp                     Fully macroexpand the inner-most expr at the cursor.
+
+                                                *fireplace-c1m*
+c1m{motion}             Macroexpand the code indicated by {motion} once.
+
+                                                *fireplace-c1mp*
+c1mp                    Macroexpand the inner-most expr at the cursor once.
 
                                                 *fireplace-cqp*
 cqp                     Bring up a prompt for code to eval/print.
