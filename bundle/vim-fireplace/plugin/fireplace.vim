@@ -155,6 +155,7 @@ endfunction
 
 function! s:repl.includes_file(file) dict abort
   let file = substitute(a:file, '\C^zipfile:\(.*\)::', '\1/', '')
+  let file = substitute(file, '\C^fugitive:[\/][\/]\(.*\)\.git[\/][\/][^\/]\+[\/]', '\1', '')
   for path in self.path()
     if file[0 : len(path)-1] ==? path
       return 1
@@ -451,6 +452,9 @@ endfunction
 
 function! s:temp_response(response) abort
   let output = []
+  if get(a:response, 'err', '') !=# ''
+    let output = map(split(a:response.err, "\n"), '";!!".v:val')
+  endif
   if get(a:response, 'out', '') !=# ''
     let output = map(split(a:response.out, "\n"), '";".v:val')
   endif
@@ -493,7 +497,7 @@ endfunction
 function! fireplace#session_eval(expr) abort
   let response = s:eval(a:expr, {'session': 1})
 
-  if !empty(get(response, 'value', ''))
+  if !empty(get(response, 'value', '')) || !empty(get(response, 'err', ''))
     call insert(s:history, {'buffer': bufnr(''), 'code': a:expr, 'ns': fireplace#ns(), 'response': response})
   endif
   if len(s:history) > &history
@@ -539,7 +543,7 @@ function! fireplace#evalprint(expr) abort
 endfunction
 
 function! fireplace#macroexpand(fn, form) abort
-  return fireplace#evalprint('(clojure.core/'.a:fn.' (quote '.a:form.'))')
+  return fireplace#evalprint('('.a:fn.' (quote '.a:form.'))')
 endfunction
 
 let g:fireplace#reader =
@@ -618,11 +622,11 @@ function! s:filterop(type) abort
 endfunction
 
 function! s:macroexpandop(type) abort
-  call fireplace#macroexpand("macroexpand", s:opfunc(a:type))
+  call fireplace#macroexpand("clojure.walk/macroexpand-all", s:opfunc(a:type))
 endfunction
 
 function! s:macroexpand1op(type) abort
-  call fireplace#macroexpand("macroexpand-1", s:opfunc(a:type))
+  call fireplace#macroexpand("clojure.core/macroexpand-1", s:opfunc(a:type))
 endfunction
 
 function! s:printop(type) abort
@@ -805,9 +809,9 @@ function! s:setup_eval() abort
   nmap <buffer> c!! <Plug>FireplaceFilterab
 
   nmap <buffer> cm <Plug>FireplaceMacroExpand
-  nmap <buffer> cmp <Plug>FireplaceMacroExpandab
+  nmap <buffer> cmm <Plug>FireplaceMacroExpandab
   nmap <buffer> c1m <Plug>FireplaceMacroExpand1
-  nmap <buffer> c1mp <Plug>FireplaceMacroExpand1ab
+  nmap <buffer> c1mm <Plug>FireplaceMacroExpand1ab
 
   nmap <buffer> cq <Plug>FireplaceEdit
   nmap <buffer> cqq <Plug>FireplaceEditab
@@ -1125,7 +1129,7 @@ augroup fireplace_alternate
   autocmd FileType clojure command! -buffer -bar AT :exe s:Alternate('tabedit')
 augroup END
 
-function! s:alternates() abort
+function! fireplace#alternates() abort
   let ns = fireplace#ns()
   if ns =~# '-test$'
     let alt = [ns[0:-6]]
@@ -1140,7 +1144,7 @@ function! s:alternates() abort
 endfunction
 
 function! s:Alternate(cmd) abort
-  let alternates = s:alternates()
+  let alternates = fireplace#alternates()
   for file in alternates
     let path = fireplace#findresource(file)
     if !empty(path)
@@ -1173,11 +1177,29 @@ if !exists('s:leiningen_repl_ports')
   let s:leiningen_repl_ports = {}
 endif
 
-function! s:leiningen_connect()
+function! s:portfile()
   if !exists('b:leiningen_root')
+    return ''
+  endif
+
+  let root = b:leiningen_root
+  let portfiles = [root.'/target/repl-port', root.'/target/repl/repl-port', root.'/.nrepl-port']
+
+  for f in portfiles
+    if filereadable(f)
+      return f
+    endif
+  endfor
+  return ''
+endfunction
+
+
+function! s:leiningen_connect()
+  let portfile = s:portfile()
+  if empty(portfile)
     return
   endif
-  let portfile = b:leiningen_root . '/target/repl-port'
+
   if getfsize(portfile) > 0 && getftime(portfile) !=# get(s:leiningen_repl_ports, b:leiningen_root, -1)
     let port = matchstr(readfile(portfile, 'b', 1)[0], '\d\+')
     let s:leiningen_repl_ports[b:leiningen_root] = getftime(portfile)

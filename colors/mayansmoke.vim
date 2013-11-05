@@ -247,8 +247,8 @@ hi WildMenu     ctermfg=16              ctermbg=117             cterm=NONE
 "   *Error          any erroneous construct
 "   *Todo           anything that needs extra attention
 " hi Comment      guifg=#A2B5CD         guibg=NONE      gui=italic
-hi Comment      guifg=#96AAC2         guibg=NONE      gui=italic
-hi Constant     guifg=DarkOrange        guibg=NONE      gui=NONE
+hi Comment      guifg=DodgerBlue         guibg=NONE      gui=italic
+hi Constant     guifg=brown3        guibg=NONE      gui=NONE
     hi String   guifg=Aquamarine4       guibg=NONE      gui=NONE
     hi Boolean  guifg=IndianRed4        guibg=NONE      gui=NONE
 hi Identifier   guifg=brown3            guibg=NONE      gui=NONE

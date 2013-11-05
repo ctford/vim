@@ -65,4 +65,5 @@ set expandtab
 autocmd Filetype clojure setlocal ts=2 sw=2
 
 " Nerd tree
-map :nt<CR> :NERDTreeToggle<CR>
+nmap <LocalLeader>nt :NERDTreeToggle<CR>
+nmap <LocalLeader>f :NERDTreeFind<CR>
