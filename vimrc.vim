@@ -44,6 +44,8 @@ map :dark<CR> :colors default<CR>
 imap <C-Space> <C-x><C-o>
 imap <C-@> <C-Space>
 
+autocmd Filetype clojure map <LocalLeader>j [<C-D>                  
+
 " VimClojure keys for Fireplace.
 map <LocalLeader>ep cpip :Last<CR> 
 map <LocalLeader>et cpab :Last<CR> 
@@ -51,6 +53,9 @@ map <LocalLeader>el :.Eval<CR>:Last<CR>
 map <LocalLeader>ef :%Eval<CR>:Last<CR>
 map <LocalLeader>me [me :Last<CR>
 map <LocalLeader>p <C-W>z
+
+" Slamhound
+autocmd Filetype clojure map <LocalLeader>sh :Slamhound<CR>
 
 " Visually indicate when we're in insert mode.
 autocmd InsertEnter * set cursorline
@@ -67,3 +72,7 @@ autocmd Filetype clojure setlocal ts=2 sw=2
 " Nerd tree
 nmap <LocalLeader>nt :NERDTreeToggle<CR>
 nmap <LocalLeader>f :NERDTreeFind<CR>
+
+" Python
+let pymode_lint = 0
+autocmd Filetype python map <LocalLeader>j :RopeGotoDefinition<CR>
