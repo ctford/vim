@@ -61,6 +61,10 @@ autocmd Filetype clojure map <LocalLeader>sh :Slamhound<CR>
 autocmd InsertEnter * set cursorline
 autocmd InsertLeave * set nocursorline
 
+" Allow insertion of whitespace in normal mode.
+map <Space> i<Space><Esc>
+map <Tab> i<Tab><Esc>
+
 " No tabs!
 set tabstop=4
 set shiftwidth=4
