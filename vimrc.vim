@@ -76,7 +76,3 @@ autocmd Filetype clojure setlocal ts=2 sw=2
 " Nerd tree
 nmap <LocalLeader>nt :NERDTreeToggle<CR>
 nmap <LocalLeader>f :NERDTreeFind<CR>
-
-" Python
-let pymode_lint = 0
-autocmd Filetype python map <LocalLeader>j :RopeGotoDefinition<CR>
