@@ -62,8 +62,8 @@ autocmd InsertEnter * set cursorline
 autocmd InsertLeave * set nocursorline
 
 " Allow insertion of whitespace in normal mode.
-map <Space> i<Space><Esc>
-map <Tab> i<Tab><Esc>
+map <Space> i<Space><Esc>l
+map <Return> i<Return><Esc>
 
 " No tabs!
 set tabstop=4
