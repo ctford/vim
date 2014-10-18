@@ -35,10 +35,9 @@ let g:paredit_mode = 1
 " Rainbow parens
 autocmd Filetype clojure RainbowParenthesesToggle
 
-" Light colour scheme
-" colors mayansmoke
-map :light<CR> :colors mayansmoke<CR>
-map :dark<CR> :colors default<CR>
+" Colours
+set background=dark
+colorscheme solarized
 
 " Omnicompletion
 imap <C-Space> <C-x><C-o>
