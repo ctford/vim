@@ -69,3 +69,7 @@ nmap <C-k> [e
 nmap <C-j> ]e
 vmap <C-k> [egv
 vmap <C-j> ]egv
+
+" Taglist
+let tlist_clojure_settings = 'lisp;f:function'
+map <LocalLeader>tl :TlistToggle<CR>
