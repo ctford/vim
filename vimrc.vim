@@ -63,3 +63,13 @@ autocmd Filetype clojure setlocal ts=2 sw=2
 " Nerd tree
 nmap <LocalLeader>nt :NERDTreeToggle<CR>
 nmap <LocalLeader>f :NERDTreeFind<CR>
+
+" Open Nerd tree if Vim is opened without a target.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Bubble
+nmap <C-k> [e
+nmap <C-j> ]e
+vmap <C-k> [egv
+vmap <C-j> ]egv
