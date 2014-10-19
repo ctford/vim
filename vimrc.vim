@@ -18,10 +18,6 @@ set smartcase
 " map <C-h> <C-W>h
 " map <C-l> <C-W>l
 
-" Shift lines up or down.
-map <C-k> :m .-2<CR>
-map <C-j> :m .+1<CR>
-
 " Return to the last edit position when opening files.
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
