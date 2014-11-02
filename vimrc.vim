@@ -69,3 +69,6 @@ vmap <C-j> ]egv
 " Taglist
 let tlist_clojure_settings = 'lisp;f:function'
 map <LocalLeader>tl :TlistToggle<CR>
+
+" Hide marks by default
+autocmd VimEnter * ShowMarksToggle
