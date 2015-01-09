@@ -56,6 +56,9 @@ set expandtab
 " Two spaces for indent in Clojure.
 autocmd Filetype clojure setlocal ts=2 sw=2
 
+" Show the last Clojure stacktrace.
+nnoremap <leader>e :Eval (clojure.repl/pst *e)<CR>
+
 " Nerd tree
 nmap <LocalLeader>nt :NERDTreeToggle<CR>
 nmap <LocalLeader>f :NERDTreeFind<CR>
