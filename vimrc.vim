@@ -39,7 +39,13 @@ colorscheme solarized
 imap <C-Space> <C-x><C-o>
 imap <C-@> <C-Space>
 
+" Clojure customisations
 autocmd Filetype clojure map <LocalLeader>j [<C-D>                  
+autocmd Filetype clojure map <LocalLeader>a :%Eval<CR>
+autocmd Filetype clojure map <LocalLeader>e :Eval (clojure.repl/pst *e)<CR>
+
+" Two spaces for indent in Clojure.
+autocmd Filetype clojure setlocal ts=2 sw=2
 
 " Slamhound
 autocmd Filetype clojure map <LocalLeader>sh :Slamhound<CR>
@@ -52,12 +58,6 @@ autocmd InsertLeave * set nocursorline
 set tabstop=4
 set shiftwidth=4
 set expandtab
-
-" Two spaces for indent in Clojure.
-autocmd Filetype clojure setlocal ts=2 sw=2
-
-" Show the last Clojure stacktrace.
-nnoremap <leader>e :Eval (clojure.repl/pst *e)<CR>
 
 " Nerd tree
 nmap <LocalLeader>nt :NERDTreeToggle<CR>
