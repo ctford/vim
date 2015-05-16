@@ -80,3 +80,7 @@ autocmd VimEnter * ShowMarksToggle
 
 set number
 set relativenumber
+
+" Surround
+nmap <LocalLeader>w" ysiw"
+nmap <LocalLeader>w' ysiw'
