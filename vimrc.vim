@@ -32,6 +32,7 @@ let g:paredit_mode = 1
 autocmd Filetype clojure RainbowParenthesesToggle
 
 " Colours
+set t_Co=256
 set background=dark
 colorscheme solarized
 
