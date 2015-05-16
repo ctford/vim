@@ -44,6 +44,7 @@ imap <C-@> <C-Space>
 autocmd Filetype clojure map <LocalLeader>j [<C-D>                  
 autocmd Filetype clojure map <LocalLeader>a :%Eval<CR>
 autocmd Filetype clojure map <LocalLeader>e :Eval (clojure.repl/pst *e)<CR>
+autocmd Filetype clojure map <LocalLeader>s :Eval (stop)<CR>
 
 " Two spaces for indent in Clojure.
 autocmd Filetype clojure setlocal ts=2 sw=2
