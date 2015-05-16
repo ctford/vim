@@ -32,7 +32,7 @@ let g:paredit_mode = 1
 autocmd Filetype clojure RainbowParenthesesToggle
 
 " Colours
-set t_Co=256
+let g:solarized_termtrans=1
 set background=dark
 colorscheme solarized
 
@@ -74,9 +74,6 @@ vmap <C-J> ]egv
 " Taglist
 let tlist_clojure_settings = 'lisp;f:function'
 map <LocalLeader>tl :TlistToggle<CR>
-
-" Hide marks by default
-autocmd VimEnter * ShowMarksToggle
 
 set number
 set relativenumber
