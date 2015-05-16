@@ -75,6 +75,10 @@ vmap <C-J> ]egv
 let tlist_clojure_settings = 'lisp;f:function'
 map <LocalLeader>tl :TlistToggle<CR>
 
+" Hide marks by default
+let g:SignatureEnabledAtStartup=0
+map <LocalLeader>mt :SignatureToggleSigns<CR>
+
 set number
 set relativenumber
 
