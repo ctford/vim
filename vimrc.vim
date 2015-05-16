@@ -13,8 +13,8 @@ set ignorecase
 set smartcase
 
 " Make moving between windows a bit more convenient.
-nmap <C-j> <C-W>j
-nmap <C-k> <C-W>k
+"nmap <C-j> <C-W>j
+"nmap <C-k> <C-W>k
 nmap <C-h> <C-W>h
 nmap <C-l> <C-W>l
 
