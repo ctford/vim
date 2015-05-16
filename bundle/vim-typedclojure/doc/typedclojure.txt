@@ -1,0 +1,49 @@
+*typedclojure.txt*  A plugin for Typed Clojure
+
+Author:  Ambrose Bonnaire-Sergeant <abonnairesergeant@gmail.com>
+License: Same terms as Vim itself (see |license|)
+
+Requires |fireplace| <https://github.com/tpope/vim-fireplace>.
+
+INTRODUCTION                                    *typedclojure*
+
+Whenever you edit a Clojure file, bindings related to Typed Clojure are added
+alongside those defined via |fireplace|.
+
+COMMANDS                                        *typedclojure-commands*
+
+These commands are local to buffers editing Clojure files.
+
+                                                *typedclojure-:CheckNs*
+:CheckNs                Type check the current namespace.  Any type errors 
+                        are loaded into a quickfix list which is opened 
+                        automatically. These mappings are valid inside the 
+                        quickfix window, operating on the current line:
+
+                        ce  show the type error message in a preview window
+
+                                                *typedclojure-:TypeAt*
+:TypeAt                 Return the inferred type at the current cursor
+                        position.
+
+MAPPINGS                                        *typedclojure-mappings*
+
+These maps are available in Clojure buffers alongside |fireplace|.
+
+                                                *typedclojure-ctn*
+ctn                     Type check the current namespace. If GUI is
+                        enabled, type information is given on mouseover
+                        via balloons (on the leftmost character of a form).
+
+                                                *typedclojure-cK*
+cK                      After checking a namespace, cK over the leftmost
+                        character of a form displays its inferred type, if
+                        any.
+
+ABOUT                                           *typedclojure-about*
+
+Please report issues on Github:
+
+https://github.com/typedclojure/vim-typedclojure
+
+ vim:tw=78:et:ft=help:norl:
