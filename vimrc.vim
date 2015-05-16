@@ -13,10 +13,10 @@ set ignorecase
 set smartcase
 
 " Make moving between windows a bit more convenient.
-" map <C-j> <C-W>j
-" map <C-k> <C-W>k
-" map <C-h> <C-W>h
-" map <C-l> <C-W>l
+nmap <C-j> <C-W>j
+nmap <C-k> <C-W>k
+nmap <C-h> <C-W>h
+nmap <C-l> <C-W>l
 
 " Return to the last edit position when opening files.
 autocmd BufReadPost *
@@ -66,10 +66,10 @@ nmap <LocalLeader>nt :NERDTreeToggle<CR>
 nmap <LocalLeader>f :NERDTreeFind<CR>
 
 " Bubble
-nmap <C-k> [e
-nmap <C-j> ]e
-vmap <C-k> [egv
-vmap <C-j> ]egv
+nmap <C-K> [e
+nmap <C-J> ]e
+vmap <C-K> [egv
+vmap <C-J> ]egv
 
 " Taglist
 let tlist_clojure_settings = 'lisp;f:function'
