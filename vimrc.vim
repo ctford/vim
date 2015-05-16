@@ -76,3 +76,6 @@ map <LocalLeader>tl :TlistToggle<CR>
 
 " Hide marks by default
 autocmd VimEnter * ShowMarksToggle
+
+set number
+set relativenumber
