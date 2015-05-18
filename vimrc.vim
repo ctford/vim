@@ -88,3 +88,6 @@ nmap <LocalLeader>w' ysiw'
 
 " Keep status line visible, as we're using Airline.
 set laststatus=2
+
+" Commit all
+nmap <LocalLeader>ga :Git add -u .<CR> :Gcommit<CR>
