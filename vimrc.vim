@@ -85,3 +85,7 @@ set relativenumber
 " Surround
 nmap <LocalLeader>w" ysiw"
 nmap <LocalLeader>w' ysiw'
+
+" Status line with Git info
+set laststatus=2
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
