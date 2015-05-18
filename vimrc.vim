@@ -86,6 +86,5 @@ set relativenumber
 nmap <LocalLeader>w" ysiw"
 nmap <LocalLeader>w' ysiw'
 
-" Status line with Git info
+" Keep status line visible, as we're using Airline.
 set laststatus=2
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
