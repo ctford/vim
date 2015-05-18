@@ -1,6 +1,6 @@
 " This is standard pathogen and vim setup.
 set nocompatible
-call pathogen#infect() 
+call pathogen#infect()
 syntax on
 filetype plugin indent on
 
@@ -41,7 +41,7 @@ imap <C-Space> <C-x><C-o>
 imap <C-@> <C-Space>
 
 " Clojure customisations
-autocmd Filetype clojure map <LocalLeader>j [<C-D>                  
+autocmd Filetype clojure map <LocalLeader>j [<C-D>
 autocmd Filetype clojure map <LocalLeader>a :%Eval<CR>
 autocmd Filetype clojure map <LocalLeader>e :Eval (clojure.repl/pst *e)<CR>
 autocmd Filetype clojure map <LocalLeader>s :Eval (stop)<CR>
