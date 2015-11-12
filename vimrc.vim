@@ -40,6 +40,8 @@ colorscheme solarized
 imap <C-Space> <C-x><C-o>
 imap <C-@> <C-Space>
 
+au BufNewFile,BufRead *.cljc set filetype=clojure
+
 " Clojure customisations
 autocmd Filetype clojure map <LocalLeader>j [<C-D>
 autocmd Filetype clojure map <LocalLeader>a :%Eval<CR>
