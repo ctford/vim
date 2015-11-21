@@ -82,8 +82,8 @@ map <LocalLeader>tl :TlistToggle<CR>
 let g:SignatureEnabledAtStartup=0
 map <LocalLeader>mt :SignatureToggleSigns<CR>
 
-set number
-set relativenumber
+"set number
+"set relativenumber
 
 " Surround
 nmap <LocalLeader>w" ysiw"
