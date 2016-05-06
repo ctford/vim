@@ -8,6 +8,9 @@ filetype plugin indent on
 let mapleader = ","
 let maplocalleader = ","
 
+" Work with the OS clipboard
+set clipboard^=unnamed,unnamedplus
+
 " Reform search.
 set ignorecase
 set smartcase

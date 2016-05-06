@@ -54,7 +54,7 @@ function! fireplace#jar_contents(path) abort
     python import vim, zipfile
     python vim.command("let s:jar_contents[a:path] = split('" + "\n".join(zipfile.ZipFile(vim.eval('a:path')).namelist()) + "', \"\n\")")
   elseif !has_key(s:jar_contents, a:path) && !empty(s:zipinfo)
-    let s:jar_contents[a:path] = split(system(s:zipinfo.shellescape(a:path)), "\n")
+    let s:aar_contents[a:path] = split(system(s:zipinfo.shellescape(a:path)), "\n")
     if v:shell_error
       let s:jar_contents[a:path] = []
     endif
