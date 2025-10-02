@@ -36,7 +36,7 @@ autocmd Filetype clojure RainbowParenthesesToggle
 
 " Colours
 let g:solarized_termtrans=1
-set background=light
+set background=dark
 colorscheme solarized
 
 " Omnicompletion
