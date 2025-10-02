@@ -8,7 +8,7 @@ let g:autoloaded_fireplace_transport = 1
 
 let s:python_dir = fnamemodify(expand("<sfile>"), ':p:h:h:h') . '/pythonx'
 if !exists('g:fireplace_python_executable')
-  let g:fireplace_python_executable = executable('python3') ? 'python3' : 'python'
+  let g:fireplace_python_executable = exepath('python3') =~? '^$\|\<appinstallerpythonredirector\.exe$' && executable('python') ? 'python' : 'python3'
 endif
 
 if !exists('s:id')
@@ -214,7 +214,8 @@ function! fireplace#transport#connect(arg) abort
             \ '(System/getProperty "path.separator") (or' .
             \ ' (System/getProperty "fake.class.path")' .
             \ ' (System/getProperty "java.class.path") "") ' .
-            \ '(System/getProperty "user.dir")'}, v:t_dict)
+            \ '(System/getProperty "user.dir") ' .
+            \ "(require 'clojure.repl 'clojure.java.javadoc)"}, v:t_dict)
       let transport._path = split(eval(response.value[1]), response.value[0][1])
       let cwd = eval(response.value[2])
       for i in range(len(transport._path))

@@ -45,8 +45,8 @@ class path based on your Leiningen or Boot config.  It's a bit slow, but a
 two-second delay is vastly preferable to being forced out of my flow for a
 single command, in my book.
 
-[cider-nrepl]: https://github.com/clojure-emacs/cider-nrepl
-[cider-nrepl-via-clj]: https://github.com/clojure-emacs/cider-nrepl#via-clj
+[cider-nrepl]: https://docs.cider.mx/cider-nrepl/usage.html
+[cider-nrepl-via-clj]: https://docs.cider.mx/cider-nrepl/usage.html#via-clj
 [Piggieback]: https://github.com/nrepl/piggieback
 [Clojure CLI]: https://clojure.org/guides/deps_and_cli
 [classpath.vim]: https://github.com/tpope/vim-classpath
@@ -93,9 +93,9 @@ understand code was a top priority.
 
 * `K` is mapped to look up the symbol under the cursor with `doc`.
 
-* `[d` is mapped to look up the symbol under the cursor with `source`.
+* `]D` is mapped to look up the symbol under the cursor with `source`.
 
-* `[<C-D>` jumps to the definition of a symbol (even if it's inside a jar
+* `]<C-D>` jumps to the definition of a symbol (even if it's inside a jar
   file).  `<C-]>` does the same and uses the tag stack.
 
 * `gf`, everybody's favorite "go to file" command, works on namespaces.

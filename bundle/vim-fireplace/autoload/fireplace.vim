@@ -57,6 +57,14 @@ function! s:cword() abort
   endtry
 endfunction
 
+function! s:zipfile_url(archive, path) abort
+  if get(g:, 'loaded_zipPlugin')[1:-1] > 31
+    return 'zipfile://' . a:archive . '::' . a:path
+  else
+    return 'zipfile:' . a:archive . '::' . a:path
+  endif
+endfunction
+
 " Section: Escaping
 
 function! s:str(string) abort
@@ -667,7 +675,7 @@ function! s:piggieback(count, arg, remove) abort
 endfunction
 
 function! s:set_up_connect() abort
-  command! -buffer -bang -bar -complete=customlist,fireplace#connect_complete -nargs=*
+  command! -buffer -bang -bar -complete=customlist,fireplace#ConnectComplete -nargs=*
         \ Connect FireplaceConnect<bang> <args>
   command! -buffer -bang -range=-1 -complete=customlist,fireplace#eval_complete -nargs=*
         \ Piggieback exe s:piggieback(<count>, <q-args>, <bang>0)
@@ -827,7 +835,7 @@ let s:oneoff.Message = s:oneoff.Session
 
 function! s:buffer_absolute(...) abort
   let buffer = call('s:buf', a:000)
-  let path = substitute(fnamemodify(bufname(buffer), ':p'), '\C^zipfile:\(.*\)::', '\1/', '')
+  let path = substitute(fnamemodify(bufname(buffer), ':p'), '\C^zipfile:\%([\/][\/]\)\=\(.*\)::', '\1/', '')
   let scheme = substitute(matchstr(path, '^\a\a\+\ze:'), '^.', '\u&', '')
   if len(scheme) && exists('*' . scheme . 'Real')
     let path = {scheme}Real(path)
@@ -857,7 +865,7 @@ function! fireplace#ns(...) abort
     return getbufvar(buffer, 'fireplace_ns')
   endif
   let head = getbufline(buffer, 1, 500)
-  let blank = '^\s*\%(;.*\)\=$'
+  let blank = '^\s*\%(\%(;\|#!\).*\)\=$'
   call filter(head, 'v:val !~# blank')
   let keyword_group = '[A-Za-z0-9_?*!+/=<>.-]'
   let lines = join(head[0:49], ' ')
@@ -1152,7 +1160,7 @@ function! fireplace#findresource(resource, ...) abort
   for dir in a:0 ? a:1 : fireplace#path()
     for suffix in suffixes
       if fnamemodify(dir, ':e') ==# 'jar' && index(fireplace#jar_contents(dir), resource . suffix) >= 0
-        return 'zipfile:' . dir . '::' . resource . suffix
+        return s:zipfile_url(dir, resource . suffix)
       elseif filereadable(dir . '/' . resource . suffix)
         return dir . s:slash() . resource . suffix
       endif
@@ -1209,25 +1217,13 @@ function! s:qfhistory() abort
   return list
 endfunction
 
-function! s:echon(state, str, ...) abort
+function! s:echon(state, str, hlgroup) abort
   let str = get(a:state, 'echo_buffer', '') . a:str
   let a:state.echo_buffer = matchstr(str, "\n$")
   if get(a:state, 'echo', v:true)
-    if a:0 > 1
-      exe 'echohl' a:2
-    endif
+    exe 'echohl' a:hlgroup
     echon len(a:state.echo_buffer) ? str[0:-2] : str
     echohl NONE
-  endif
-  if has_key(a:state.history, 'tempfile')
-    let lines = split(a:str, "\n", 1)
-    if a:0
-      call map(lines, 'a:1 . v:val')
-      if get(lines, -1) is# a:1
-        let lines[-1] = ''
-      endif
-    endif
-    call writefile(lines, a:state.history.tempfile, 'ab')
   endif
 endfunction
 
@@ -1240,15 +1236,15 @@ function! s:eval_callback(state, delegates, message) abort
     let a:state.ns = a:message.ns
   endif
   if has_key(a:message, 'out')
-    call s:echon(a:state, a:message.out, ';=', 'Question')
+    call s:echon(a:state, a:message.out, 'Question')
   endif
   if has_key(a:message, 'err')
-    call s:echon(a:state, a:message.err, ';!', 'WarningMsg')
+    call s:echon(a:state, a:message.err, 'WarningMsg')
   endif
   if has_key(a:message, 'value')
-    call s:echon(a:state, a:message.value)
+    call s:echon(a:state, a:message.value, 'NONE')
     if has_key(a:message, 'ns')
-      call s:echon(a:state, "\n")
+      call s:echon(a:state, "\n", 'NONE')
     endif
   endif
 
@@ -1270,6 +1266,18 @@ function! s:eval_callback(state, delegates, message) abort
       endif
     endif
     let a:state.history.response = fireplace#transport#combine(a:state.history.messages)
+    let response = a:state.history.response
+    let buffer = []
+    for [prefix, value] in [[';!', get(response, 'err', '')], [';=', get(response, 'out', '')]] +
+          \ map(copy(get(response, 'value', [])), { _, v -> ['', v]})
+      let lines = split(value, "\n", 1)
+      if empty(lines[-1])
+        call remove(lines, -1)
+      endif
+      let buffer += map(lines, 'prefix . v:val')
+    endfor
+    call add(buffer, '')
+    call writefile(buffer, a:state.history.tempfile, 'b')
     call insert(s:history, a:state.history)
     if len(s:history) > &history
       call remove(s:history, &history, -1)
@@ -1335,22 +1343,30 @@ function! fireplace#eval(...) abort
     return msg
   endif
 
-  while !fireplace#wait(msg.id, 1)
-    let peek = getchar(1)
-    if state.echo && peek != 0 && !(has('win32') && peek == 128)
-      let c = getchar()
-      let c = type(c) == type(0) ? nr2char(c) : c
-      if c ==# "\<C-D>"
-        let state.echo = v:false
-        let state.bg = v:true
-        echo "\rBackgrounded"
-        return []
-      else
-        call fireplace#transport#stdin(msg.id, c)
-        echon c
+  try
+    while !fireplace#wait(msg.id, 1)
+      let peek = getchar(1)
+      if state.echo && peek != 0 && !(has('win32') && peek == 128)
+        let c = getchar()
+        let c = type(c) == type(0) ? nr2char(c) : c
+        if c ==# "\<C-D>"
+          let state.echo = v:false
+          let state.bg = v:true
+          echo "\rBackgrounded"
+          let finished = 1
+          return []
+        else
+          call fireplace#transport#stdin(msg.id, c)
+          echon c
+        endif
       endif
+    endwhile
+    let finished = 1
+  finally
+    if !exists('l:finished')
+      call fireplace#interrupt(msg.id)
     endif
-  endwhile
+  endtry
 
   if get(state, 'ex', '') !=# ''
     let err = 'Clojure: '.state.ex
@@ -1372,18 +1388,25 @@ function! s:DisplayWidth() abort
   endif
 endfunction
 
+function! s:RefreshLast() abort
+  for win in range(1, winnr('$'))
+    if getwinvar(win, '&previewwindow')
+      let loclist = getloclist(win)
+      if len(loclist) && map(loclist, 'v:val.text') == map(s:qfhistory()[0 : len(loclist)-1], 'v:val.text')
+        exe s:Last(1, 1)
+      endif
+    endif
+  endfor
+endfunction
+
 function! fireplace#echo_session_eval(...) abort
   try
     call call('fireplace#eval', [s:DisplayWidth(), v:true] + a:000)
-    for win in range(1, winnr('$'))
-      if getwinvar(win, '&previewwindow')
-        let loclist = getloclist(win)
-        if len(loclist) && map(loclist, 'v:val.text') == map(s:qfhistory()[0 : len(loclist)-1], 'v:val.text')
-          exe s:Last(1, 1)
-        endif
-      endif
-    endfor
+    call s:RefreshLast()
   catch
+    if v:exception =~# '^Clojure:'
+      call s:RefreshLast()
+    endif
     echohl ErrorMSG
     echomsg v:exception
     echohl NONE
@@ -1682,7 +1705,7 @@ function! s:stacktrace_list(all) abort
     let item.filename = fireplace#findresource(item.resource, path)
     if empty(item.filename) && !empty(get(entry, 'file-url', ''))
       let item.filename = substitute(substitute(entry['file-url'],
-            \ '^jar:file:\([^!]*\)!', 'zipfile:\1:', ''),
+            \ '^jar:file:\([^!]*\)!/', '\=s:zipfile_url(submatch(1), "")', ''),
             \ '^file:', '', '')
     endif
     if has('patch-8.0.1782')
@@ -1962,7 +1985,7 @@ function! fireplace#source(symbol) abort
       let file = substitute(strpart(info.file, 5), '/', s:slash(), 'g')
     elseif get(info, 'file', '') =~# '^jar:file:'
       let zip = matchstr(info.file, '^jar:file:\zs.*\ze!')
-      let file = 'zipfile:' . zip . '::' . info.resource
+      let file = s:zipfile_url(zip, info.resource)
     else
       let file = get(info, 'file', '')
     endif
@@ -2028,7 +2051,7 @@ function! s:Tag(cmd, keyword) abort
     if file =~# '^zipfile:.*::'
       let after = '|keepalt keepjumps edit +' . line . ' ' . fnameescape(file)
       let line = 1
-      let file = matchstr(file, 'zipfile:\zs.\{-\}\ze::')
+      let file = matchstr(file, 'zipfile:\%([\/][\/]\)\=\zs.\{-\}\ze::')
     endif
     call add(tag_contents, a:keyword . "\t" . file . "\t" . line . ";\"\tlanguage:Clojure")
   endif
@@ -2172,7 +2195,7 @@ endfunction
 function! fireplace#cfile() abort
   let isfname = &isfname
   try
-    set isfname+='
+    set isfname+=',*
     let file = substitute(expand('<cfile>'), "^''*", '', '')
   finally
     let isfname = &isfname
@@ -2410,8 +2433,10 @@ function! s:set_up_doc() abort
   setlocal keywordprg=:Doc
 
   call s:map('n', 'K', '<Plug>FireplaceK', '<unique>')
-  call s:map('n', '[d', '<Plug>FireplaceSource')
-  call s:map('n', ']d', '<Plug>FireplaceSource')
+  call s:map('n', '[D', '<Plug>FireplaceSource')
+  call s:map('n', ']D', '<Plug>FireplaceSource')
+  call s:map('n', '[d', '<Plug>FireplaceSource', '<unique>')
+  call s:map('n', ']d', '<Plug>FireplaceSource', '<unique>')
 endfunction
 
 " Section: Tests
@@ -2515,7 +2540,7 @@ function! s:RunTests(bang, count, ...) abort
     else
       let args = [fireplace#ns()]
       if a:count
-        let pattern = '^\s*(def\k*\s\+\(\h\k*\)'
+        let pattern = '^\s*(\%(\h\k*/\)\=def\k*\s\+\%(\^:\h\k*\s\+\)*\(\h\k*\)'
         let line = search(pattern, 'bcWn')
         if line
           let args[0] .= '/' . matchlist(getline(line), pattern)[1]
